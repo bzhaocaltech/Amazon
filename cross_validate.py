@@ -12,8 +12,19 @@ class CrossValidation:
         y_copy = np.copy(y_data)
         if len(x_copy) != len(y_copy):
             raise TypeError("x_data and y_data lengths do not match!")
-        self.x_data = np.array_split(x_copy, num_partitions)
-        self.y_data = np.array_split(y_copy, num_partitions)
+
+        # Randomly shuffle x and y
+        x_rand = []
+        y_rand = []
+        random_order = np.arange(len(x_copy))
+        np.random.shuffle(random_order)
+        for i in random_order:
+            x_rand.append(x_copy[i])
+            y_rand.append(y_copy[i])
+
+
+        self.x_data = np.array_split(x_rand, num_partitions)
+        self.y_data = np.array_split(y_rand, num_partitions)
 
     # Returns a certain partition of the data
     def get_partition(self, partition_number):
